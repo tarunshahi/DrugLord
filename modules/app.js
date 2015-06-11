@@ -3,7 +3,7 @@
 var drugLord = angular.module('drugLord',[]);
 
 
-drugLord.controller('gameController',['$scope','cityService','playerService','actionService','warehouseService','placeService','tomorrowService',function($scope,cityServ,player,action,ware,place,tomm){
+drugLord.controller('gameController',['$scope','cityService','playerService','actionService','warehouseService','placeService','tomorrowService','vaultService',function($scope,cityServ,player,action,ware,place,tomm,vServ){
 
 	$scope.start = false;
 
@@ -61,25 +61,30 @@ drugLord.controller('gameController',['$scope','cityService','playerService','ac
     $scope.buyInventoryItem=place.buyItem;
     $scope.sellBuyInvItem=place.sellItem;
     $scope.selectedBuyInvItems=place.selectedBuyInvItems;
-    $scope.moveInVault=place.pushInvault;
-    $scope.pushInPocket=place.pushInPocket;
-    $scope.selectVaultItems=place.selectVaultItems;
     $scope.bankOperation = place.bankOperation;
     $scope.payLone=place.payLone;
 	
 	//vault info
-	$scope.setupVaultInfo=function(){
-	   $scope.vaultInfo=cityServ.vaultInfo;
-	   console.log( $scope.vaultInfo);
-    };
+    $scope.moveInVault=vServ.pushInvault;
+    $scope.pushInPocket=vServ.pushInPocket;
+    $scope.selectVaultItems=vServ.selectVaultItems;
+	
 	$scope.showVaultItem=function(index){
-		$scope.vaultDrug=$scope.vaultInfo[index].vault;
+		$scope.vaultDrug=$scope.vault[index].vaultInfo;
 	};
+	$scope.setupVaultInfo=function(){
+          $scope.vault=vServ.vault;
+          $scope.vaultInfo=vServ.getvaultInfo();
+          
+	};
+
     //watch function
 
-	$scope.flyAway = function() {
+	$scope.getCityNames = function() {
 		$scope.destinations = cityServ.getCityNames();
 	};
+
+	$scope.stayHere = tomm.stayHere;
 
 	$scope.flyToCity = tomm.flyAway;
 
@@ -88,13 +93,13 @@ drugLord.controller('gameController',['$scope','cityService','playerService','ac
 	},function(newValue){
 		if($scope.start) {
 			$scope.setupPlayer();
+			$scope.setupCityNMarket();
 		}
 	});
 
 	//watch vault drugs
 	$scope.$watch(function(){
-		console.log("watching vaultInfo");
-		return cityServ.getVaultInfo();
+		return vServ.getvaultInfo();
 	},function(newValue){
 		if($scope.start) {
 			$scope.setupVaultInfo();

@@ -75,15 +75,15 @@
         
         <div class="tomorrow col-md-4">
             <h4 class="heading">Tomorrow</h4><hr>
-            <button class="btn btn-primary col-xs-5">Stay Here</button>
+            <button class="btn btn-primary col-xs-5" ng-click="stayHere()">Stay Here</button>
             <div class="col-xs-2"></div>
 
             <div class="dropdown" style="display:inline">
-                <button class="btn btn-primary col-xs-5 dropdown-toggle" data-toggle="dropdown" ng-click="flyAway()"> Fly Away
-                <span class="caret"> </span> </button>
-                <ul class="dropdown-menu scrollable-menu" role="menu">
-                   <li ng-click="flyToCity($event)" ng-repeat="dest in destinations"><a data-toggle="modal">{{dest}}</a></li> 
-                </ul> 
+               <button class="btn btn-primary col-xs-5 dropdown-toggle" data-toggle="dropdown" ng-click="getCityNames()"> Fly Away
+              <span class="caret"> </span> </button>
+               <ul class="dropdown-menu scrollable-menu" role="menu">
+                  <li ng-click="flyToCity(destinations[$index].name,destinations[$index].price)" ng-repeat="dest in destinations track by $index"><a data-toggle="modal"><span>{{dest.name }}</span>&nbsp&nbsp<span>{{dest.price | currency}}</&nbsp></span></a></li> 
+              </ul> 
             </div>
 
         </div>
@@ -265,7 +265,7 @@
                          <div class="col-sm-5" id="inVault">
                             <h4 class="heading" style="background-color:#CACAB0;text-align:center;"> In the Vault</h4>
                             <ul class="list-group">
-                               <li ng-click="selectVaultItems($event,$index)" align="center" class="list-group-item" ng-if="start" ng-repeat="vaults in vault track by $index">
+                               <li ng-click="selectVaultItems($event,$index)" align="center" class="list-group-item" ng-if="start" ng-repeat="vaults in vaultInfo track by $index">
                                 <span class="drug-name" align="center">{{vaults.name}}</span> 
                                 <span align="center" class="cost">{{vaults.price | currency}}</span>
                                  <span class="badge">{{vaults.qty}}</span> 
@@ -294,8 +294,8 @@
                         <div class="col-sm-5" id="vaultLocation">
                             <h4 class="heading" style="background-color:#2142AB;text-align:center;text-color:#EBEBEB;">Vault Location</h4>
                              <ul class="list-group">
-                               <li ng-click="showVaultItem($index)" align="center" class="list-group-item" ng-if="vaultInfo" ng-repeat="vaults in vaultInfo track by $index">
-                                <span class="cityName" align="center">{{vaults.name}}</span> 
+                               <li ng-click="showVaultItem($index)" align="center" class="list-group-item" ng-if="vaultInfo" ng-repeat="vaults in vault track by $index">
+                                <span class="cityName" align="center">{{vaults.cityName}}</span> 
                                </li>
                              </ul> 
                         </div>
@@ -303,9 +303,9 @@
                             <h4 class="heading" style="background-color:#2142AB;text-align:center;text-color:#EBEBEB;">Vault Contents</h4>
                              <ul class="list-group">
                                <li  align="center" class="list-group-item" ng-if="start" ng-repeat="vaultdrug in vaultDrug track by $index">
-                                <span class="vaultDrug" align="center">{{vaultdrug.name}}</span>
+                                <span class="vaultDrug" align="left">{{vaultdrug.name}}</span>
                                 <span align="center" class="cost">{{vaultdrug.price | currency}}</span>
-                                 <span class="badge">{{vaultdrug.qty}}</span> 
+                                 <span class="badge" align="right">{{vaultdrug.qty}}</span> 
                                </li>
                              </ul> 
                         </div>
@@ -379,5 +379,6 @@
     <script src="modules/player.js"></script>
     <script src="modules/place.js"></script>
     <script src="modules/tomorrow.js"></script>
+    <script src="modules/vault.js"></script>
 </body>
 </html>

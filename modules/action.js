@@ -26,7 +26,7 @@ acScope.sellDrug = function(){
                        tqty=acScope.drugs[j].qty,
                        sellCash=acScope.whdrugs[i].price;
                        temp=parseInt(window.prompt("You want to sell "+acScope.whdrugs[i].name+ "in the price of "+acScope.whdrugs[i].price+" ."+" \nYou Have availabe quantity is "+acScope.whdrugs[i].qty+" Enter quantity you want to sell"));
-                       if(temp == acScope.whdrugs[i].qty)
+                       if(temp == acScope.whdrugs[i].qty && temp >0)
                        {
                             console.log("4.1");
                             acScope.whdrugs.splice(i,1);

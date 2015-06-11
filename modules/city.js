@@ -2,7 +2,7 @@
 
 drugLord.service('cityService',['drugService',function(dcs){
 	var scope = this;
-	scope.cities = ["Austin, USA", "Beijing, China", "Boston, USA", "Detroit, USA", "London, England", "Los Angeles, USA", "Miami, USA", "Moscow, Russia", "New York, USA", "Paris, France", "San Francisco, USA", "St. Peteresburg, Russia", "Sydney, Australia", "Toronto, Canada", "Vancouver, Canada"];
+	scope.cities = [{name:"Austin, USA",price:Math.round(603/2)}, {name:"Beijing, China",price:Math.round(7040/2)}, {name:"Boston, USA",price:Math.round(3000/2)},{name: "Detroit,USA",price:Math.round(312/2)},{name: "London, England",price:Math.round(800/2)},{name: "Los Angeles, USA",price:Math.round(2668/2)},{name: "Miami, USA",price:Math.round(420/2)},{name: "Moscow, Russia",price:Math.round(4872/2)},{name: "New York, USA",price:Math.round(3384/2)},{name: "Paris, France",price:Math.round(3384/2)},{name: "San Francisco, USA",price:Math.round(2340/2)},{name: "St. Peteresburg, Russia",price:Math.round(4468/2)}, {name:"Sydney, Australia",price:Math.round(8730/2)}, {name:"Toronto, Canada",price:Math.round(380/2)}, {name:"Vancouver, Canada",price:Math.round(352/2)}];
 
 	scope.initCities = function() {
 		console.log("initcities");
@@ -14,8 +14,9 @@ drugLord.service('cityService',['drugService',function(dcs){
 		for(var i = 0, n = scope.cities.length; i < n; i++) {
 			scope.cityObjs.push(
 				{
-					name : scope.cities[i], 
-					vault : [], drugs : dcs.getDrugs(), 
+					name : scope.cities[i].name,
+					distance: scope.cities[i].price,
+					drugs : dcs.getDrugs(), 
 					market : dcs.initMarket(), 
 					isHere : false
 				}
@@ -31,7 +32,7 @@ drugLord.service('cityService',['drugService',function(dcs){
 		for(var i =0, n = scope.cityObjs.length; i < n; i++) {
 			if (scope.cityObjs[i].name == cityName) {
 				scope.currCity = scope.cityObjs[i];
-				scope.cityObjs[i].isHere = true;
+				scope.currCity.isHere = true;
 				continue;
 			};
 			scope.cityObjs[i].isHere = false;
@@ -40,21 +41,34 @@ drugLord.service('cityService',['drugService',function(dcs){
 
 	scope.getCityNames = function() {
 			var arr = new Array();
+			var currentCityIndex=scope.getCurrentCityIndex();
 			for(var i =0, n = scope.cityObjs.length; i < n; i++) {
 				if(scope.cityObjs[i].isHere) {
 					continue;
 				}
-				arr.push(scope.cityObjs[i].name);
+				arr.push({name:scope.cityObjs[i].name,price:Math.round(Math.sqrt(Math.pow(scope.cityObjs[i].distance,2)+Math.pow(scope.cityObjs[currentCityIndex].distance,2)))});
 			}
-
+			console.log(arr);
 		return arr;
+	};
+	scope.getCurrentCityIndex=function(){
+		var index=0;
+		for(var i =0, n = scope.cityObjs.length; i < n; i++)
+		{
+			if(scope.cityObjs[i].isHere)
+			{
+				break;
+			}
+				index++;
+		}
+		return index;
 	};
 
 	scope.getCityObjs = function() {
 		return scope.cityObjs;
 	};
 
-   
+
 	scope.prevTarget = null;
     scope.selectedDrug = function(e,index) {
         //first mark all selected value to false
